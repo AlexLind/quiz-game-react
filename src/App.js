@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { ColorRing } from "react-loader-spinner";
 
-
 export default function App() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
@@ -30,13 +29,34 @@ export default function App() {
         "https://opentdb.com/api.php?amount=10&category=9&difficulty=easy&type=multiple";
       const response = await axios.get(baseURL);
       const data = response.data;
-      console.log("data results", data.results);
-      setQuestionList(data.results);
+      let updatedQuestions = new Array(data.results.length).fill(null).map(() => ({
+        questionText: "",
+        answerOptions: [],
+      }));
+      for (let i = 0; i < data.results.length; i++) {
+        updatedQuestions[i].questionText = data.results[i].question;
+        for (let j = 0; j < data.results[i].incorrect_answers.length; j++) {
+          updatedQuestions[i].answerOptions.push({
+            answerText: data.results[i].incorrect_answers[j],
+            isCorrect: false,
+          });
+        }
+        updatedQuestions[i].answerOptions.push({
+          answerText: data.results[i].correct_answer,
+          isCorrect: true,
+        });
+        console.log("iterator is: ", i, "object is: ", updatedQuestions);
+        for (let k = updatedQuestions[i].answerOptions.length - 1; k > 0; k--) {
+          const j = Math.floor(Math.random() * (k + 1));
+          const temp = updatedQuestions[i].answerOptions[k];
+          updatedQuestions[i].answerOptions[k] = updatedQuestions[i].answerOptions[j];
+          updatedQuestions[i].answerOptions[j] = temp;
+        }
+      }
+      setQuestionList(updatedQuestions);
     };
     getQuestions();
   }, []);
-
-  console.log(questionList.correct_answer);
 
   return questionList.length ? (
     <div className="app">
@@ -50,16 +70,13 @@ export default function App() {
             <h1>
               Question {currentQuestion + 1}/{questionList.length}
             </h1>
-            <p>{questionList[currentQuestion].question}</p>
+            <p>{questionList[currentQuestion].questionText}</p>
           </section>
 
           <section className="answer-section">
-            {questionList[currentQuestion].incorrect_answers.map((item) => (
-              <button onClick={() => handleClick(false)}>{item}</button>
+            {questionList[currentQuestion].answerOptions.map((item) => (
+              <button onClick={() => handleClick(item.isCorrect)}>{item.answerText}</button>
             ))}
-            <button onClick={() => handleClick(true)}>
-              {questionList[currentQuestion].correct_answer}
-            </button>
           </section>
         </>
       )}
