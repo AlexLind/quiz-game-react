@@ -18,7 +18,7 @@ export default function App() {
     }
 
     const nextQuestion = currentQuestion + 1;
-    if (nextQuestion < questions.length) {
+    if (nextQuestion < questionList.length) {
       setCurrentQuestion(nextQuestion);
     } else {
       setShowScore(true);
@@ -34,36 +34,46 @@ export default function App() {
       setQuestionList(data.results)
     }
     getQuestions();
-    console.log(questionList)
   }, [])
 
+  const pageIsLoaded = async function () {
+    return questionList.length
+  }
 
-  console.log(questionList)
 
-  return (
-    <div className="app">
-      {showScore ? (
-        <section className="showScore-section">
-          Your score is {score} out of {questions.length}
-        </section>
-      ) : (
-        <>
-          <section className="question-section">
-            <h1>
-              Question {currentQuestion + 1}/{questions.length}
-            </h1>
-            <p>{questions[currentQuestion].questionText}</p>
-          </section>
+  console.log(questionList.correct_answer)
 
-          <section className="answer-section">
-            {questions[currentQuestion].answerOptions.map((item) => (
-              <button onClick={() => handleClick(item.isCorrect)}>
-                {item.answerText}
-              </button>
-            ))}
-          </section>
-        </>
-      )}
-    </div>
+  return ( 
+    (
+      questionList.length
+    ? <div className="app">
+          {showScore ? (
+            <section className="showScore-section">
+              Your score is {score} out of {questionList.length}
+            </section>
+          ) : (
+            <>
+              <section className="question-section">
+                <h1>
+                  Question {currentQuestion + 1}/{questionList.length}
+                </h1>
+                <p>{questionList[currentQuestion].question}</p>
+              </section>
+    
+              <section className="answer-section">
+                {questionList[currentQuestion].incorrect_answers.map((item) => (
+                  <button onClick={() => handleClick(false)}>
+                    {item}
+                  </button>
+                ))}
+                <button onClick={() => handleClick(true)}>
+                    {questionList[currentQuestion].correct_answer}
+                  </button>
+              </section>
+            </>
+          )}
+        </div>
+    : <h1>Loading page...</h1>
+    )
   );
 }
