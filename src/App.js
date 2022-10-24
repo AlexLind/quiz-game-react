@@ -26,7 +26,9 @@ export default function App() {
   };
 
   useEffect(() => {
-        getToken();
+    if (true) {
+      getToken();
+    }
   }, []);
 
   useEffect(() => {
@@ -36,7 +38,8 @@ export default function App() {
   const handleRestart = () => {
     setRestarts(prev => prev + 1)
     setCurrentQuestion(0)
-    setShowScore(false)
+    setScore(0)
+    setTimeout(() => setShowScore(false), 300 )
   }
 
   return questionList.length ? (
@@ -85,7 +88,9 @@ export default function App() {
     const getQuestions = async function () {
       const token = localStorage.getItem("token");
       const baseURL = url.concat(`&token=${token}`);
+      console.log(baseURL)
       const response = await axios.get(baseURL);
+      console.log(response)
       const data = response.data;
       let updatedQuestions = new Array(data.results.length)
         .fill(null)
@@ -114,6 +119,7 @@ export default function App() {
         }
       }
       setQuestionList(updatedQuestions);
+      console.log(questionList)
     };
     getQuestions();
   }
