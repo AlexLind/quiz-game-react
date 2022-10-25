@@ -6,4 +6,7 @@ Simple API quiz game made with React JS, Axios and MUI.
 ## API Used
 https://opentdb.com/
 
-![image](https://user-images.githubusercontent.com/97929409/197417450-e1a03b3d-41c2-4337-94a0-95bae0aa6991.png)
+### App Screenshot
+
+<img width="808" alt="image" src="https://user-images.githubusercontent.com/97929409/197736949-851b6120-c659-4fa7-aa9f-11f87a738f8b.png">
+
