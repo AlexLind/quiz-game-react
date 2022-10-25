@@ -15,7 +15,7 @@ export default function ShowScore({
             <ul>
               {AnswersList.map((answer, index) => (
                 <>
-                <li>
+                <li key={index}>
                   <span className={`answer-${answer.isCorrect}`}>Q{index + 1}: { atob(answer.answerText)}</span>
                 </li>
                 <br />
