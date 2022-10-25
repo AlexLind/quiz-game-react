@@ -64,27 +64,27 @@ p {
   font-size: 1rem;
   display: grid;
 }
-.answers-list ul{
+.answers-list ul {
   margin-top: 20px;
   padding: 0;
   columns: 2;
   list-style-type: none;
   align-self: center;
 }
-.answers-list ul li{
-display: inline-block;
-margin: 10px;
-padding: 5px;
-border-bottom: black 1px solid;
+.answers-list ul li {
+  display: inline-block;
+  margin: 10px;
+  padding: 5px;
+  border-bottom: black 1px solid;
 }
-li .answer-true{
-color: green;
+li .answer-true {
+  color: green;
 }
-li .answer-false{
-color: red;
+li .answer-false {
+  color: red;
 }
 
-.MuiButton-root	{
+.MuiButton-root {
   padding: 50px;
   width: fit-content;
   margin: auto;
@@ -114,20 +114,20 @@ button {
   position: relative;
 }
 
-.showScore-section .MuiButton-root{
-align-self: center;
-margin: 40px auto;
+.showScore-section .MuiButton-root {
+  align-self: center;
+  margin: 40px auto;
 }
 
-.MuiFormGroup-root{
-align-self: center;
-margin: 40px auto;
-scale: 1.3;
+.MuiFormGroup-root {
+  align-self: center;
+  margin: 40px auto;
+  scale: 1.3;
 }
 
-#demo-radio-buttons-group-label{
-font-size: 3rem;
-font-weight: 600;
+#demo-radio-buttons-group-label {
+  font-size: 3rem;
+  font-weight: 600;
 }
 
 .MuiFormControlLabel-label {

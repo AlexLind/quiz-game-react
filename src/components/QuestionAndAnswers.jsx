@@ -21,7 +21,7 @@ export default function QuestionAndAnswers({
             variant="text"
             size="large"
             key={index}
-            onClick={() => handleClick(item)}
+            onClick={() => handleClick(item.isCorrect)}
           >
             {atob(item.answerText)}
           </Button>
