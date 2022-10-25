@@ -27,9 +27,9 @@ body {
 .app {
   text-align: center;
   width: 500px;
-  min-height: 600px;
+  min-height: 50vh;
   height: min-content;
-  transform: translate(-50%, 50%);
+  transform: translate(-50%, 20%);
   border-radius: 15px;
   padding: 20px;
   box-shadow: 10px 10px 42px 0px rgba(0, 0, 0, 0.75);
@@ -54,7 +54,7 @@ p {
   grid-template-columns: 1fr 1fr;
   position: relative;
   margin: 50px auto;
-  max-width: 300px;
+  max-width: 500px;
   row-gap: 60px;
   padding: 20px 40px;
   column-gap: 60px;
@@ -62,6 +62,7 @@ p {
 
 .MuiButton-root	{
   padding: 50px;
+  width: fit-content;
 }
 
 button {

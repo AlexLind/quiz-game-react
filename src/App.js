@@ -3,7 +3,6 @@ import "./App.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { url } from "./utils/url";
-import { ColorRing } from "react-loader-spinner";
 import Button from "@mui/material/Button";
 import LoadingButton from '@mui/lab/LoadingButton';
 
@@ -88,7 +87,8 @@ export default function App() {
   function getQuestions() {
     const getQuestions = async function () {
       const token = localStorage.getItem("token");
-      const baseURL = url.concat(`&token=${token}`);
+      // const baseURL = url.concat(`&token=${token}`);
+      const baseURL = url;
       console.log(baseURL);
       const response = await axios.get(baseURL);
       console.log(response);
