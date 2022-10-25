@@ -63,6 +63,7 @@ p {
 .MuiButton-root	{
   padding: 50px;
   width: fit-content;
+  margin: auto;
 }
 
 button {
@@ -80,12 +81,22 @@ button {
 }
 
 .showScore-section {
+  height: 400px;
+  margin-top: 20px;
   font-size: 35px;
   text-align: center;
+  align-items: center;
   position: absolute;
   top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
+}
+
+.showScore-section .MuiButton-root{
+align-self: center;
+margin: 40px auto;
 }
 
 @media all and (max-width: 700px) {

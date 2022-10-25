@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { url } from "./utils/url";
 import Button from "@mui/material/Button";
-import LoadingButton from '@mui/lab/LoadingButton';
+import LoadingButton from "@mui/lab/LoadingButton";
 
 export default function App() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -12,6 +12,10 @@ export default function App() {
   const [showScore, setShowScore] = useState(false);
   const [questionList, setQuestionList] = useState([]);
   const [restarts, setRestarts] = useState(0);
+
+  useEffect(() => {
+    getQuestions();
+  }, [restarts]);
 
   const handleClick = (isCorrect) => {
     if (isCorrect) {
@@ -26,16 +30,6 @@ export default function App() {
     }
   };
 
-  useEffect(() => {
-    if (!localStorage.getItem("token")) {
-      getToken();
-    }
-  }, []);
-
-  useEffect(() => {
-    getQuestions();
-  }, [restarts]);
-
   const handleRestart = () => {
     setRestarts((prev) => prev + 1);
     setCurrentQuestion(0);
@@ -48,7 +42,10 @@ export default function App() {
       {showScore ? (
         <section className="showScore-section">
           Your score is {score} out of {questionList.length} <br />
-          <Button variant="contained" size="large" onClick={handleRestart}>Restart</Button>
+          <div className="wrong-answers-list"> PLACEHOLDER</div>
+          <Button variant="contained" size="large"  onClick={handleRestart}>
+            Restart
+          </Button>
         </section>
       ) : (
         <>
@@ -77,7 +74,12 @@ export default function App() {
   ) : (
     <div className="app">
       <section className="question-section">
-        <LoadingButton size='large' loading loadingIndicator="Loading…" variant="outlined">
+        <LoadingButton
+          size="large"
+          loading
+          loadingIndicator="Loading…"
+          variant="outlined"
+        >
           Fetch data
         </LoadingButton>
       </section>
@@ -86,12 +88,8 @@ export default function App() {
 
   function getQuestions() {
     const getQuestions = async function () {
-      const token = localStorage.getItem("token");
-      // const baseURL = url.concat(`&token=${token}`);
       const baseURL = url;
-      console.log(baseURL);
       const response = await axios.get(baseURL);
-      console.log(response);
       const data = response.data;
       let updatedQuestions = new Array(data.results.length)
         .fill(null)
@@ -120,18 +118,7 @@ export default function App() {
         }
       }
       setQuestionList(updatedQuestions);
-      console.log(questionList);
     };
     getQuestions();
-  }
-
-  function getToken() {
-    const getToken = async function () {
-      const baseURL = "https://opentdb.com/api_token.php?command=request";
-      const response = await axios.get(baseURL);
-      const data = response.data;
-      localStorage.setItem("token", data.token);
-    };
-    getToken();
   }
 }
