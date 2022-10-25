@@ -5,12 +5,11 @@ import React from "react";
 import "./App.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
-import { url } from "./utils/url";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
 import {
   shuffleQuestionsArray,
   populateQuestionsArray,
@@ -22,8 +21,8 @@ export default function App() {
   const [showScore, setShowScore] = useState(false);
   const [questionList, setQuestionList] = useState([]);
   const [restarts, setRestarts] = useState(0);
-  const [wrongAnswersList, setWrongAnswersList] = useState([]);
-  const [difficulty, setDifficulty] = useState('')
+  const [AnswersList, setAnswersList] = useState([]);
+  const [difficulty, setDifficulty] = useState("");
 
   useEffect(() => {
     getQuestions();
@@ -41,6 +40,7 @@ export default function App() {
         answerOptions: [],
       }));
 
+    // eslint-disable-next-line array-callback-return
     data.results.map((question, index) => {
       populateQuestionsArray(updatedQuestions, index, question);
       shuffleQuestionsArray(updatedQuestions, index);
@@ -48,13 +48,13 @@ export default function App() {
     setQuestionList(updatedQuestions);
   };
 
-
   const handleClick = (item) => {
     if (item.isCorrect) {
       setScore(score + 1);
     }
 
     const nextQuestion = currentQuestion + 1;
+    setAnswersList([...AnswersList, item]);
     if (nextQuestion < questionList.length) {
       setCurrentQuestion(nextQuestion);
     } else {
@@ -64,52 +64,58 @@ export default function App() {
 
   const handleRestart = () => {
     setRestarts((prev) => prev + 1);
-    setQuestionList([])
+    setQuestionList([]);
     setCurrentQuestion(0);
-    setDifficulty('')
+    setDifficulty("");
     setShowScore(false);
+    setAnswersList([]);
     setScore(0);
   };
 
   const handleChange = (event) => {
-    setQuestionList([])
+    setQuestionList([]);
     setDifficulty(event.target.value);
   };
 
   return !difficulty ? (
     <div className="app">
-    <FormControl>
-      <FormLabel id="demo-radio-buttons-group-label">Choose Difficulty:</FormLabel>
-      <RadioGroup
-        aria-labelledby="demo-radio-buttons-group-label"
-        defaultValue="female"
-        name="radio-buttons-group"
-        row
-        value={difficulty}
-        onChange={handleChange}
-      >
-        <FormControlLabel value="easy" control={<Radio />} label="Easy" />
-        <FormControlLabel value="medium" control={<Radio />} label="Medium" />
-        <FormControlLabel value="hard" control={<Radio />} label="Hard" />
-      </RadioGroup>
-    </FormControl>
+      <FormControl>
+        <FormLabel id="demo-radio-buttons-group-label">
+          Choose Difficulty:
+        </FormLabel>
+        <RadioGroup
+          aria-labelledby="demo-radio-buttons-group-label"
+          defaultValue="female"
+          name="radio-buttons-group"
+          row
+          value={difficulty}
+          onChange={handleChange}
+        >
+          <FormControlLabel value="easy" control={<Radio />} label="Easy" />
+          <FormControlLabel value="medium" control={<Radio />} label="Medium" />
+          <FormControlLabel value="hard" control={<Radio />} label="Hard" />
+        </RadioGroup>
+      </FormControl>
     </div>
   ) : questionList.length ? (
-    <div className="app">
-      {showScore ? (
+    showScore ? (
+      <div className="app">
         <ShowScore
           questionList={questionList}
           score={score}
           handleRestart={handleRestart}
+          AnswersList={AnswersList}
         />
-      ) : (
+      </div>
+    ) : (
+      <div className="app">
         <QuestionAndAnswers
           questionList={questionList}
           currentQuestion={currentQuestion}
           handleClick={handleClick}
         />
-      )}
-    </div>
+      </div>
+    )
   ) : (
     <Loading />
   );
