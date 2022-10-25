@@ -5,6 +5,11 @@ import React from "react";
 import "./App.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
 import { url } from "./utils/url";
 import {
   shuffleQuestionsArray,
@@ -17,13 +22,16 @@ export default function App() {
   const [showScore, setShowScore] = useState(false);
   const [questionList, setQuestionList] = useState([]);
   const [restarts, setRestarts] = useState(0);
+  const [wrongAnswersList, setWrongAnswersList] = useState([]);
+  const [difficulty, setDifficulty] = useState('')
 
   useEffect(() => {
     getQuestions();
-  }, [restarts]);
+  }, [restarts, difficulty]);
 
   const getQuestions = async function () {
-    const baseURL = url;
+    const baseURL = `https://opentdb.com/api.php?amount=10&category=18&difficulty=${difficulty}&type=multiple&encode=base64`;
+    console.log(baseURL);
     const response = await axios.get(baseURL);
     const data = response.data;
     let updatedQuestions = new Array(data.results.length)
@@ -40,8 +48,9 @@ export default function App() {
     setQuestionList(updatedQuestions);
   };
 
-  const handleClick = (isCorrect) => {
-    if (isCorrect) {
+
+  const handleClick = (item) => {
+    if (item.isCorrect) {
       setScore(score + 1);
     }
 
@@ -55,12 +64,37 @@ export default function App() {
 
   const handleRestart = () => {
     setRestarts((prev) => prev + 1);
+    setQuestionList([])
     setCurrentQuestion(0);
-    setTimeout(() => setShowScore(false), 300);
+    setDifficulty('')
+    setShowScore(false);
     setScore(0);
   };
 
-  return questionList.length ? (
+  const handleChange = (event) => {
+    setQuestionList([])
+    setDifficulty(event.target.value);
+  };
+
+  return !difficulty ? (
+    <div className="app">
+    <FormControl>
+      <FormLabel id="demo-radio-buttons-group-label">Choose Difficulty:</FormLabel>
+      <RadioGroup
+        aria-labelledby="demo-radio-buttons-group-label"
+        defaultValue="female"
+        name="radio-buttons-group"
+        row
+        value={difficulty}
+        onChange={handleChange}
+      >
+        <FormControlLabel value="easy" control={<Radio />} label="Easy" />
+        <FormControlLabel value="medium" control={<Radio />} label="Medium" />
+        <FormControlLabel value="hard" control={<Radio />} label="Hard" />
+      </RadioGroup>
+    </FormControl>
+    </div>
+  ) : questionList.length ? (
     <div className="app">
       {showScore ? (
         <ShowScore
