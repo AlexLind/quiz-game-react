@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { url } from "./utils/url";
 import { ColorRing } from "react-loader-spinner";
+import Button from "@mui/material/Button";
+import LoadingButton from '@mui/lab/LoadingButton';
 
 export default function App() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -26,7 +28,7 @@ export default function App() {
   };
 
   useEffect(() => {
-    if (true) {
+    if (!localStorage.getItem("token")) {
       getToken();
     }
   }, []);
@@ -36,18 +38,18 @@ export default function App() {
   }, [restarts]);
 
   const handleRestart = () => {
-    setRestarts(prev => prev + 1)
-    setCurrentQuestion(0)
-    setScore(0)
-    setTimeout(() => setShowScore(false), 300 )
-  }
+    setRestarts((prev) => prev + 1);
+    setCurrentQuestion(0);
+    setTimeout(() => setShowScore(false), 300);
+    setScore(0);
+  };
 
   return questionList.length ? (
     <div className="app">
       {showScore ? (
         <section className="showScore-section">
           Your score is {score} out of {questionList.length} <br />
-          <button onClick={handleRestart}>Restart</button>
+          <Button variant="contained" size="large" onClick={handleRestart}>Restart</Button>
         </section>
       ) : (
         <>
@@ -55,14 +57,19 @@ export default function App() {
             <h1>
               Question {currentQuestion + 1}/{questionList.length}
             </h1>
-            <p>{atob(questionList[currentQuestion].questionText) }</p>
+            <p>{atob(questionList[currentQuestion].questionText)}</p>
           </section>
 
           <section className="answer-section">
             {questionList[currentQuestion].answerOptions.map((item, index) => (
-              <button key={index} onClick={() => handleClick(item.isCorrect)}>
-                {atob(item.answerText) }
-              </button>
+              <Button
+                variant="text"
+                size="large"
+                key={index}
+                onClick={() => handleClick(item.isCorrect)}
+              >
+                {atob(item.answerText)}
+              </Button>
             ))}
           </section>
         </>
@@ -71,15 +78,9 @@ export default function App() {
   ) : (
     <div className="app">
       <section className="question-section">
-        <ColorRing
-          visible={true}
-          height="80"
-          width="80"
-          ariaLabel="blocks-loading"
-          wrapperStyle={{}}
-          wrapperClass="blocks-wrapper"
-          colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
-        />
+        <LoadingButton size='large' loading loadingIndicator="Loading…" variant="outlined">
+          Fetch data
+        </LoadingButton>
       </section>
     </div>
   );
@@ -88,9 +89,9 @@ export default function App() {
     const getQuestions = async function () {
       const token = localStorage.getItem("token");
       const baseURL = url.concat(`&token=${token}`);
-      console.log(baseURL)
+      console.log(baseURL);
       const response = await axios.get(baseURL);
-      console.log(response)
+      console.log(response);
       const data = response.data;
       let updatedQuestions = new Array(data.results.length)
         .fill(null)
@@ -119,7 +120,7 @@ export default function App() {
         }
       }
       setQuestionList(updatedQuestions);
-      console.log(questionList)
+      console.log(questionList);
     };
     getQuestions();
   }

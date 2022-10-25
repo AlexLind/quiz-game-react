@@ -26,8 +26,8 @@ body {
 
 .app {
   text-align: center;
-  width: 450px;
-  min-height: 200px;
+  width: 500px;
+  min-height: 600px;
   height: min-content;
   transform: translate(-50%, 50%);
   border-radius: 15px;
@@ -53,17 +53,21 @@ p {
   display: grid;
   grid-template-columns: 1fr 1fr;
   position: relative;
-  margin: 20px auto;
+  margin: 50px auto;
   max-width: 300px;
-  row-gap: 30px;
+  row-gap: 60px;
   padding: 20px 40px;
-  column-gap: 15px;
+  column-gap: 60px;
+}
+
+.MuiButton-root	{
+  padding: 50px;
 }
 
 button {
   position: relative;
   width: 100px;
-  font-size: 16px;
+  font-size: 32px;
   color: #ffffff;
   background-color: #2b3868;
   border-radius: 3px;
